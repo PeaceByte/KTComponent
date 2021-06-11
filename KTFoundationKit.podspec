@@ -22,9 +22,9 @@ Pod::Spec.new do |s|
 Contains the decomponents for Design System.
                        DESC
 
-  s.homepage         = 'https://github.com/PeaceByte/PeaceByte.github.io'
+  s.homepage         = 'https://github.com/PeaceByte/KTComponent'
   s.license          = 'MIT'
-  s.author           = 'MIT'
+  s.author           = { :type => "MIT", :file => "LICENSE.md" }
   s.source           =  { :git => "https://github.com/PeaceByte/KTComponent.git", :tag => s.version.to_s }
   s.requires_arc  = true
   s.ios.deployment_target = '10.0'
