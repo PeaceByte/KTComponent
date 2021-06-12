@@ -8,9 +8,9 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'KTFoundationKit'
+  s.name             = 'KTADKit'
   s.version          = '0.0.1'
-  s.summary          = 'KT Foundation components'
+  s.summary          = 'KT AD components'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -19,19 +19,24 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-KT Foundation Kit.
+KT Ad Kit
                        DESC
 
   s.homepage         = 'https://github.com/PeaceByte/KTComponent'
   s.license          = 'MIT'
-  s.author           = { :type => "MIT", :file => "LICENSE.md" }
+  s.author           = { :type => "MIT", :file => "LICENSE" }
   s.source           =  { :git => "https://github.com/PeaceByte/KTComponent.git", :tag => s.version.to_s }
   s.requires_arc  = true
+
   s.ios.deployment_target = '10.0'
   s.swift_versions = '5.3'
 
-  s.source_files = 'KTFoundationKit/**/*','KTFoundationKit/*.h'
+  s.source_files = 'KTADKit/*'
   # s.resources = 'assets/**/*'
-  s.dependency 'XCGLogger'
+
+  s.dependency 'KTFoundationKit', '0.0.1'
+  s.static_framework = true
+  s.dependency 'Google-Mobile-Ads-SDK', '8.5.0'
+
 
 end
