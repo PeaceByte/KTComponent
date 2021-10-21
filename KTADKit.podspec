@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'KTADKit'
-  s.version          = '0.0.1'
+  s.version          = '0.0.4'
   s.summary          = 'KT AD components'
 
 # This description is used to generate tags and improve search results.
@@ -36,7 +36,7 @@ KT Ad Kit
 
   s.dependency 'KTFoundationKit', '0.0.1'
   s.static_framework = true
-  s.dependency 'Google-Mobile-Ads-SDK', '8.5.0'
+  s.dependency 'Google-Mobile-Ads-SDK', '8.12.0'
 
 
 end
