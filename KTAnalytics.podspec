@@ -30,7 +30,7 @@ KT Ad Kit
 
   s.ios.deployment_target = '10.0'
   s.swift_versions = '5.3'
-
+  
 
 
   s.source_files = 'KTAnalytics/*'
@@ -38,7 +38,13 @@ KT Ad Kit
 
   s.dependency 'KTFoundationKit', '0.0.1'
   s.static_framework = true
-  s.dependency 'FirebaseAnalytics', '8.8.0'
+  s.dependency 'Firebase'
+  s.dependency 'Firebase/Core'
+  s.dependency 'Firebase/Analytics'
+
+
+  
+
 
 
 
