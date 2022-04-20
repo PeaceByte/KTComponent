@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'KTADKit'
-  s.version          = '0.0.4'
+  s.version          = '0.0.6'
   s.summary          = 'KT AD components'
 
 # This description is used to generate tags and improve search results.
