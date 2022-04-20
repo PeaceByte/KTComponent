@@ -39,8 +39,8 @@ KT Ad Kit
   s.dependency 'KTFoundationKit', '0.0.1'
   s.static_framework = true
   s.dependency 'Firebase'
-  s.dependency 'Firebase/Core'
-  s.dependency 'Firebase/Analytics'
+  s.dependency 'Firebase/Core', '8.8.0'
+  s.dependency 'Firebase/Analytics', '8.8.0'
 
 
   

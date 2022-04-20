@@ -11,7 +11,7 @@ import KTFoundationKit
 
 public let IntersectAdReceivedNotification = "IntersectAdReceivedNotification";
 
-
+public typealias UserDidEarnRewardBlock = (ADReward)->Void;
 
 @objc public enum ADProvider: Int {
     case admob
@@ -23,10 +23,15 @@ public let IntersectAdReceivedNotification = "IntersectAdReceivedNotification";
     #endif
 }
 
+
+@objc public class ADReward:NSObject{
+    @objc public var amount:NSDecimalNumber = 0;
+}
+
 @objc public protocol IADBannerView{
     @objc func getBannerView() -> UIView?;
     @objc func loadAD(_ view:UIView?);
-    @objc func getAdaptiveSize(_ view:UIView?) -> CGSize;
+    @objc static func getAdaptiveSize(_ view:UIView?) -> CGSize;
 }
 
 @objc public class ADConfig:NSObject{
@@ -36,6 +41,7 @@ public let IntersectAdReceivedNotification = "IntersectAdReceivedNotification";
     @objc public var bannerAdId:String?;
     @objc public var interstitialAdId:String?;
     @objc public var appOpenAdId:String?;
+    @objc public var rewardedInterstitialAdId:String?;
 }
 
 @objc public class ADManager: NSObject {
@@ -80,6 +86,25 @@ public let IntersectAdReceivedNotification = "IntersectAdReceivedNotification";
         #endif
         
         }
+    }
+    
+    
+    @objc public func getBannerViewSize(view:UIView?, provider:ADProvider = .admob)->CGSize{
+        var res:CGSize = .zero;
+        
+        if self.adEnable{
+            if let view = view{
+                switch(provider){
+                case .admob:
+                    res = AdmobBannerView.getAdaptiveSize(view);
+                    break;
+                }
+            }
+        }
+        
+        
+        return res;
+        
     }
     
     @objc public func createBannerView(rootViewController:UIViewController, provider:ADProvider = .admob) -> IADBannerView?{
@@ -258,5 +283,61 @@ public let IntersectAdReceivedNotification = "IntersectAdReceivedNotification";
     }
 }
 
-
+extension ADManager{
+    @objc public func tryToPresentRewardedInterstitialAd(in viewController:UIViewController?, userDidEarnRewardHandler:@escaping UserDidEarnRewardBlock) -> Bool{
+         var bRes = false
+         
+         LogManager.debug("started")
+         if(!self.adEnable){
+             LogManager.debug("IntersectAdHelper NotShow");
+             return bRes
+         }
+         
+         if(true){//![[IAPManager sharedInstance] isProductPurchased:kProductIDRemoveAds]
+             var adType:ADProvider = .admob
+             if let adProvider = AdvancedSettingManager.sharedInstance.intVauleSetting(for:adProviderKey){
+                 adType = ADProvider(rawValue: adProvider) ?? .admob
+             }
+             let isRequestEnable = true;//self.requestInterstitialEnable()
+             if isRequestEnable{
+                 bRes = self.tryToPresentRewardedInterstitialAd(viewController: viewController, of: adType, userDidEarnRewardHandler: userDidEarnRewardHandler)
+                 if(bRes)
+                 {
+                    // self.resetLastRequestTime()
+                 }
+             }
+             
+         }
+         LogManager.debug("finish")
+         return bRes
+     }
+     
+     
+     
+     private func tryToPresentRewardedInterstitialAd(viewController:UIViewController?, of adProviderType:ADProvider, userDidEarnRewardHandler:@escaping UserDidEarnRewardBlock) -> Bool{
+         var bRes = true
+         switch (adProviderType) {
+         case .admob:
+             LogManager.debug("Show AD_PROVIDER_TYPE_ADMOB ")
+             bRes = AdmobrewardedInterstitialAd.sharedInstance.tryToPresentAd(viewController: viewController, userDidEarnRewardHandler: userDidEarnRewardHandler);
+             
+         #if FB_ENABLE
+         case .facebook:
+             
+             LogManager.debug("Show AD_PROVIDER_TYPE_FACEBOOK ")
+         // [[FBInterstitialAdHelper sharedInstance] showInterstitial:viewController];
+         #endif
+         #if MOPUB_ENABLE
+         case .mopub:
+             
+             LogManager.debug("Show AD_PROVIDER_TYPE_MOPUB")
+         //    [[MopubInterstitialAdHelper sharedInstance] showInterstitial:viewController];
+         
+         #endif
+         
+         }
+         return bRes;
+         
+     }
+}
 

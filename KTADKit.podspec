@@ -31,12 +31,15 @@ KT Ad Kit
   s.ios.deployment_target = '10.0'
   s.swift_versions = '5.3'
 
+
+
   s.source_files = 'KTADKit/*'
   # s.resources = 'assets/**/*'
 
   s.dependency 'KTFoundationKit', '0.0.1'
   s.static_framework = true
-  s.dependency 'Google-Mobile-Ads-SDK', '8.12.0'
+  s.dependency 'Google-Mobile-Ads-SDK', '8.13.0'
+
 
 
 end

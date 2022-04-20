@@ -69,14 +69,14 @@ class AdmobBannerView: NSObject,IADBannerView{
             let view = view else {
             return;
         }
-        let adaptiveSize = self.getAdaptiveSize(view);
+        let adaptiveSize = Self.getAdaptiveSize(view);
         bannerView.adSize = GADAdSizeFromCGSize(adaptiveSize);
 
         // Step 4 - Create an ad request and load the adaptive banner ad.
         bannerView.load(GADRequest())
     }
     
-    func getAdaptiveSize(_ view: UIView?) -> CGSize {
+    static func getAdaptiveSize(_ view: UIView?) -> CGSize {
         var resSize:CGSize = .zero;
         guard let view = view else {
             return resSize;
