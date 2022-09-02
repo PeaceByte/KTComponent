@@ -24,6 +24,12 @@ public typealias UserDidEarnRewardBlock = (ADReward)->Void;
 }
 
 
+@objc public enum FullScreenAdType: Int {
+    case intersect
+    case openApp
+}
+
+
 @objc public class ADReward:NSObject{
     @objc public var amount:NSDecimalNumber = 0;
 }
@@ -135,9 +141,11 @@ public typealias UserDidEarnRewardBlock = (ADReward)->Void;
     private var frequency:TimeInterval = 90//Second
 
     private let largeAdsFrequencyKey = "largeAdsFrequency"
-    private var lastRequestDate:Date? = nil
+    private var lastRequestIntersectAdDate:Date? = nil
+    private var lastRequestOpenAppAdDate:Date? = nil
     
-    private func requestInterstitialEnable() -> Bool
+    
+    private func requestFullScreenAdEnable(type:FullScreenAdType) -> Bool
     {
         var res = true
         let now = Date()
@@ -150,7 +158,14 @@ public typealias UserDidEarnRewardBlock = (ADReward)->Void;
             LogManager.debug("frequency = \(frequency)")
         }
         
-        if let lastRequestDate = self.lastRequestDate{
+        var lastRequestDate:Date?
+        switch(type){
+        case .intersect:
+            lastRequestDate = self.lastRequestIntersectAdDate;
+        case .openApp:
+            lastRequestDate = self.lastRequestOpenAppAdDate;
+        }
+        if let lastRequestDate = lastRequestDate{
             let passedTime = now.timeIntervalSince(lastRequestDate)
             LogManager.debug("passedTime = \(passedTime)")
             if(passedTime < self.frequency){
@@ -161,8 +176,11 @@ public typealias UserDidEarnRewardBlock = (ADReward)->Void;
         return res
     }
     
-    private func resetLastRequestTime(){
-        self.lastRequestDate = Date()
+    private func resetlastRequestIntersectAdDate(){
+        self.lastRequestIntersectAdDate = Date()
+    }
+    private func resetlastRequestOpenAdAdDate(){
+        self.lastRequestOpenAppAdDate = Date()
     }
     
     private func configureAdSDK() -> Bool{
@@ -186,12 +204,12 @@ public typealias UserDidEarnRewardBlock = (ADReward)->Void;
             if let adProvider = AdvancedSettingManager.sharedInstance.intVauleSetting(for:adProviderKey){
                 adType = ADProvider(rawValue: adProvider) ?? .admob
             }
-            let isRequestEnable = self.requestInterstitialEnable()
+            let isRequestEnable = self.requestFullScreenAdEnable(type: .intersect)
             if isRequestEnable{
                 bRes = self.showInterstitial(viewController: viewController, of: adType)
                 if(bRes)
                 {
-                    self.resetLastRequestTime()
+                    self.resetlastRequestIntersectAdDate()
                 }
             }
             
@@ -240,12 +258,12 @@ public typealias UserDidEarnRewardBlock = (ADReward)->Void;
             if let adProvider = AdvancedSettingManager.sharedInstance.intVauleSetting(for:adProviderKey){
                 adType = ADProvider(rawValue: adProvider) ?? .admob
             }
-            let isRequestEnable = true;//self.requestInterstitialEnable()
+            let isRequestEnable = self.requestFullScreenAdEnable(type: .openApp)
             if isRequestEnable{
                 bRes = self.tryToPresentAd(viewController: viewController, of: adType)
                 if(bRes)
                 {
-                   // self.resetLastRequestTime()
+                    self.resetlastRequestOpenAdAdDate()
                 }
             }
             

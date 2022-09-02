@@ -51,7 +51,7 @@ class AdmobOpenAppAd:NSObject{
      
    
         
-        if let gOpenAd = self.appOpenAd, let rwc = viewController, wasLoadTimeLessThanNHoursAgo(thresholdN: 4) {
+        if let gOpenAd = self.appOpenAd, let rwc = viewController {
             LogManager.debug("present");
             gOpenAd.present(fromRootViewController: rwc)
             res = true;
@@ -62,13 +62,14 @@ class AdmobOpenAppAd:NSObject{
         return res;
     }
 
+    /*
     func wasLoadTimeLessThanNHoursAgo(thresholdN: Int) -> Bool {
         let now = Date()
         let timeIntervalBetweenNowAndLoadTime = now.timeIntervalSince(self.loadTime)
         let secondsPerHour = 3600.0
         let intervalInHours = timeIntervalBetweenNowAndLoadTime / secondsPerHour
         return intervalInHours < Double(thresholdN)
-    }
+    }*/
 }
 
 extension AdmobOpenAppAd:GADFullScreenContentDelegate{
